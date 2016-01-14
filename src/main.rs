@@ -23,6 +23,7 @@ fn try_create_window(samples: u8) -> Result<GlutinWindow, String> {
     WindowSettings::new("Rust Rogue", [1024, 1024])
         .exit_on_esc(true)
         .opengl(OPEN_GL)
+        .vsync(true)
         .samples(samples)
         .build()
 }
