@@ -4,11 +4,14 @@ extern crate itertools;
 extern crate opengl_graphics;
 extern crate piston;
 extern crate rand;
+extern crate find_folder;
 
 mod game;
 
 use glutin_window::GlutinWindow;
-use opengl_graphics::{GlGraphics, OpenGL};
+use opengl_graphics::{GlGraphics, OpenGL, Texture, TextureSettings};
+use graphics::{Image, clear, default_draw_state};
+use graphics::rectangle::square;
 use piston::event_loop::{Events, EventLoop};
 use piston::input::{Button, Event, Input, RenderEvent};
 use piston::window::WindowSettings;
@@ -40,6 +43,16 @@ fn main() {
     // Game state
     let mut game = Game::new();
 
+    // Textures
+    let resources = find_folder::Search::ParentsThenKids(3, 3)
+        .for_folder("resources").unwrap();
+
+    let sprite = resources.join("Scavengers_SpriteSheet.png");
+    //Create the image object and attach a square Rectangle object inside.
+    let image   = Image::new().rect(square(0.0, 0.0, 512.0));
+    //A texture to use with the image
+    let texture = Texture::from_path(sprite).unwrap();
+
     while let Some(e) = events.next(&mut window) {
         match e {
             Event::Input(Input::Press(Button::Keyboard(key))) => {
@@ -52,6 +65,10 @@ fn main() {
 
             Event::Render(args) => {
                 gl.draw(args.viewport(), |c, g| game.render(c, g));
+                gl.draw(args.viewport(), |c, g| {
+                    image.draw(&texture, default_draw_state(), c.transform, g);
+                });
+
             }
 
             Event::Update(args) => {
