@@ -1,4 +1,5 @@
 use rand::{thread_rng, Rng};
+use find_folder;
 use graphics::{Context, Transformed};
 use opengl_graphics::{GlGraphics, Texture};
 
