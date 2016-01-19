@@ -10,7 +10,7 @@ mod models;
 mod game;
 
 use sdl2_window::Sdl2Window;
-use opengl_graphics::{GlGraphics, OpenGL, Texture};
+use opengl_graphics::{GlGraphics, OpenGL};
 use piston::event_loop::{Events, EventLoop};
 use piston::input::{Button, Event, Input, RenderEvent};
 use piston::window::WindowSettings;

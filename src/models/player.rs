@@ -1,5 +1,3 @@
-extern crate find_folder;
-
 use rand::{thread_rng, Rng};
 use graphics::{Context, Transformed};
 use opengl_graphics::{GlGraphics, Texture};
