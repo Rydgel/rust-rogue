@@ -2,6 +2,9 @@ use piston::input::*;
 use graphics::*;
 use opengl_graphics::GlGraphics;
 
+use models::Player;
+
+
 pub struct Game {
     rotation: f64,
     x: f64,
@@ -10,6 +13,7 @@ pub struct Game {
     right: bool,
     up: bool,
     down: bool,
+    player: Player,
 }
 
 impl Game {
@@ -21,7 +25,8 @@ impl Game {
             left: false,
             right: false,
             up: false,
-            down: false
+            down: false,
+            player: Player::spawn(),
         }
     }
 
@@ -71,5 +76,6 @@ impl Game {
         let square = rectangle::square(0.0, 0.0, 100.0);
         let red = [1.0, 0.0, 0.0, 1.0];
         rectangle(red, square, center.rot_rad(self.rotation).trans(-50.0, -50.0), g);
+        self.player.draw(&c, g);
     }
 }
