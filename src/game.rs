@@ -4,6 +4,10 @@ use opengl_graphics::GlGraphics;
 
 use models::Player;
 
+#[derive(Default)]
+struct Timers {
+    current_time: f64,
+}
 
 pub struct Game {
     rotation: f64,
@@ -14,6 +18,7 @@ pub struct Game {
     up: bool,
     down: bool,
     player: Player,
+    timers: Timers,
 }
 
 impl Game {
@@ -27,11 +32,14 @@ impl Game {
             up: false,
             down: false,
             player: Player::spawn(),
+            timers: Timers::default(),
         }
     }
 
     pub fn update(&mut self, upd: UpdateArgs) {
+        self.timers.current_time += upd.dt;
         self.rotation += 15.0 * upd.dt;
+        self.player.update_animation_state(self.timers.current_time);
         self.move_player(upd.dt);
     }
 

@@ -7,7 +7,7 @@ use opengl_graphics::{GlGraphics, Texture};
 pub struct Player {
     x: u32,
     y: u32,
-    animation_state: u32, // there is 6 animation frames.
+    animation_state: i32, // there is 6 animation frames.
     life: u32,
     texture: Texture,
 }
@@ -31,7 +31,7 @@ impl Player {
         Player {
             x: x,
             y: y,
-            animation_state: 1,
+            animation_state: 0,
             life: 100,
             texture: texture,
         }
@@ -44,8 +44,13 @@ impl Player {
         let position_y = self.y as f64 * 64.0;
         let transform = c.transform.trans(position_x, position_y);
         Image::new()
-            .src_rect([0, 0, 64, 64])
+            .src_rect([0 + self.animation_state * 64, 0, 64, 64])
             .draw(&self.texture, default_draw_state(), transform, gl);
+    }
+
+    pub fn update_animation_state(&mut self, state: f64) {
+        let st = ((state / 0.1) as i32) % 6;
+        self.animation_state = st;
     }
 
     /// When the player get something to eat on the ground

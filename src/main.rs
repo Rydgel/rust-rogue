@@ -34,7 +34,7 @@ fn try_create_window(samples: u8) -> Result<Sdl2Window, String> {
 fn main() {
     // Create a window with a AA sampling of 8 or fall back to 0
     let mut window = try_create_window(8).or_else(|_| try_create_window(0)).unwrap();
-    window.sdl_context.mouse().set_relative_mouse_mode(true);
+    // window.sdl_context.mouse().set_relative_mouse_mode(true);
 
     let mut gl = GlGraphics::new(OPEN_GL);
 
