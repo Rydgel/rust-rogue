@@ -3,6 +3,8 @@ use graphics::*;
 use opengl_graphics::GlGraphics;
 
 use models::Player;
+use models::Skelington;
+use drawings::Sprites;
 
 #[derive(Default)]
 struct Timers {
@@ -18,7 +20,9 @@ pub struct Game {
     up: bool,
     down: bool,
     player: Player,
+    skelingtons: Vec<Skelington>,
     timers: Timers,
+    sprites: Sprites,
 }
 
 impl Game {
@@ -32,14 +36,20 @@ impl Game {
             up: false,
             down: false,
             player: Player::spawn(),
+            skelingtons: vec![Skelington::spawn(), Skelington::spawn()],
             timers: Timers::default(),
+            sprites: Sprites::new(),
         }
     }
 
     pub fn update(&mut self, upd: UpdateArgs) {
         self.timers.current_time += upd.dt;
         self.rotation += 15.0 * upd.dt;
+        // animations
         self.player.update_animation_state(self.timers.current_time);
+        for s in &mut self.skelingtons {
+            s.update_animation_state(self.timers.current_time);
+        }
         self.move_player(upd.dt);
     }
 
@@ -84,6 +94,11 @@ impl Game {
         let square = rectangle::square(0.0, 0.0, 100.0);
         let red = [1.0, 0.0, 0.0, 1.0];
         rectangle(red, square, center.rot_rad(self.rotation).trans(-50.0, -50.0), g);
-        self.player.draw(&c, g);
+        // Draw player
+        self.player.draw(&c, g, &self.sprites);
+        // Draw skelingtons
+        for s in &self.skelingtons {
+            s.draw(&c, g, &self.sprites);
+        }
     }
 }

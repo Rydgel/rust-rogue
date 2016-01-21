@@ -7,6 +7,7 @@ extern crate rand;
 extern crate find_folder;
 
 mod models;
+mod drawings;
 mod game;
 
 use sdl2_window::Sdl2Window;
