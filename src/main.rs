@@ -20,7 +20,7 @@ use game::Game;
 
 const OPEN_GL: OpenGL = OpenGL::V3_2;
 
-// Returns a result containing a GlutinWindow or an error if the window
+// Returns a result containing a Sdl2Window or an error if the window
 // settings are not supported
 fn try_create_window(samples: u8) -> Result<Sdl2Window, String> {
     WindowSettings::new("Rust Rogue", [640, 640])
