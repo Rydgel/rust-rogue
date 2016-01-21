@@ -4,6 +4,7 @@ use graphics::default_draw_state;
 use graphics::Image;
 use find_folder;
 
+
 pub struct Sprites {
     texture: Texture
 }

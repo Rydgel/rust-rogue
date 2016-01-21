@@ -1,6 +1,7 @@
 use piston::input::*;
 use graphics::*;
 use opengl_graphics::GlGraphics;
+use itertools::Itertools;
 
 use models::Player;
 use models::Skelington;
@@ -97,8 +98,6 @@ impl Game {
         // Draw player
         self.player.draw(&c, g, &self.sprites);
         // Draw skelingtons
-        for s in &self.skelingtons {
-            s.draw(&c, g, &self.sprites);
-        }
+        self.skelingtons.iter().foreach(|s| s.draw(&c, g, &self.sprites));
     }
 }
