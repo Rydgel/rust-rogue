@@ -6,20 +6,18 @@ use find_folder;
 
 
 pub struct Sprites {
-    texture: Texture
+    texture: Texture,
 }
 
 impl Sprites {
     /// Loading sprite sheet from image.
     pub fn new() -> Sprites {
         let resources = find_folder::Search::ParentsThenKids(3, 3)
-            .for_folder("resources")
-            .unwrap();
+                            .for_folder("resources")
+                            .unwrap();
         let sprite = resources.join("Scavengers_SpriteSheet.png");
 
-        Sprites {
-            texture: Texture::from_path(sprite).unwrap()
-        }
+        Sprites { texture: Texture::from_path(sprite).unwrap() }
     }
 
     /// Get the right slice of the sprite. Sprite is 8x8
@@ -30,16 +28,32 @@ impl Sprites {
     }
 
     /// Get player sprite, with animation state
-    pub fn draw_player(&self, x: f64, y: f64, animation_state: i32, c: &Context, gl: &mut GlGraphics) {
+    pub fn draw_player(&self,
+                       x: f64,
+                       y: f64,
+                       animation_state: i32,
+                       c: &Context,
+                       gl: &mut GlGraphics) {
         Image::new()
             .src_rect(Sprites::animated_sprites_coord(animation_state, 0))
-            .draw(&self.texture, default_draw_state(), c.transform.trans(x, y), gl);
+            .draw(&self.texture,
+                  default_draw_state(),
+                  c.transform.trans(x, y),
+                  gl);
     }
 
     /// Get Jon Skelington sprite, with animation state
-    pub fn draw_skelington(&self, x: f64, y: f64, animation_state: i32, c: &Context, gl: &mut GlGraphics) {
+    pub fn draw_skelington(&self,
+                           x: f64,
+                           y: f64,
+                           animation_state: i32,
+                           c: &Context,
+                           gl: &mut GlGraphics) {
         Image::new()
             .src_rect(Sprites::animated_sprites_coord(animation_state, 6))
-            .draw(&self.texture, default_draw_state(), c.transform.trans(x, y), gl);
+            .draw(&self.texture,
+                  default_draw_state(),
+                  c.transform.trans(x, y),
+                  gl);
     }
 }

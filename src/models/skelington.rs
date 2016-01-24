@@ -1,6 +1,6 @@
 use rand::{thread_rng, Rng};
-use graphics::{Context};
-use opengl_graphics::{GlGraphics};
+use graphics::Context;
+use opengl_graphics::GlGraphics;
 
 use drawings::Point;
 use drawings::Sprites;

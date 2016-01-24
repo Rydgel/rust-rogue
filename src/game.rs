@@ -94,7 +94,10 @@ impl Game {
         let center = c.transform.trans(self.x, self.y);
         let square = rectangle::square(0.0, 0.0, 100.0);
         let red = [1.0, 0.0, 0.0, 1.0];
-        rectangle(red, square, center.rot_rad(self.rotation).trans(-50.0, -50.0), g);
+        rectangle(red,
+                  square,
+                  center.rot_rad(self.rotation).trans(-50.0, -50.0),
+                  g);
         // Draw player
         self.player.draw(&c, g, &self.sprites);
         // Draw skelingtons
