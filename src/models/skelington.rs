@@ -30,7 +30,7 @@ impl Skelington {
     pub fn draw(&self, c: &Context, gl: &mut GlGraphics, sprites: &Sprites) {
         let x = self.coordinates.x() + 50.0;
         let y = self.coordinates.y() + 50.0;
-        sprites.draw_skelington(x, y, self.animation_state, c, gl);
+        sprites.draw_chars(x, y, 6, self.animation_state, c, gl);
     }
 
     pub fn update_animation_state(&mut self, state: f64) {

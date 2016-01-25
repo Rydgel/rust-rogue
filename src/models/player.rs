@@ -30,7 +30,7 @@ impl Player {
     pub fn draw(&self, c: &Context, gl: &mut GlGraphics, sprites: &Sprites) {
         let x = self.coordinates.x();
         let y = self.coordinates.y();
-        sprites.draw_player(x, y, self.animation_state, c, gl);
+        sprites.draw_chars(x, y, 0, self.animation_state, c, gl);
     }
 
     pub fn update_animation_state(&mut self, state: f64) {

@@ -16,7 +16,6 @@ impl Sprites {
                             .for_folder("resources")
                             .unwrap();
         let sprite = resources.join("Scavengers_SpriteSheet.png");
-
         Sprites { texture: Texture::from_path(sprite).unwrap() }
     }
 
@@ -27,33 +26,12 @@ impl Sprites {
         [x * 64, y * 64, 64, 64]
     }
 
-    /// Get player sprite, with animation state
-    pub fn draw_player(&self,
-                       x: f64,
-                       y: f64,
-                       animation_state: i32,
-                       c: &Context,
-                       gl: &mut GlGraphics) {
+    /// Draw an animated sprite with current state
+    pub fn draw_chars(&self, x: f64, y: f64, i: i32, st: i32, c: &Context, gl: &mut GlGraphics) {
+        let sprite_coord = Sprites::animated_sprites_coord(st, i);
+        let transf = c.transform.trans(x, y);
         Image::new()
-            .src_rect(Sprites::animated_sprites_coord(animation_state, 0))
-            .draw(&self.texture,
-                  default_draw_state(),
-                  c.transform.trans(x, y),
-                  gl);
-    }
-
-    /// Get Jon Skelington sprite, with animation state
-    pub fn draw_skelington(&self,
-                           x: f64,
-                           y: f64,
-                           animation_state: i32,
-                           c: &Context,
-                           gl: &mut GlGraphics) {
-        Image::new()
-            .src_rect(Sprites::animated_sprites_coord(animation_state, 6))
-            .draw(&self.texture,
-                  default_draw_state(),
-                  c.transform.trans(x, y),
-                  gl);
+            .src_rect(sprite_coord)
+            .draw(&self.texture, default_draw_state(), transf, gl);
     }
 }
