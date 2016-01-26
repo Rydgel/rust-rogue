@@ -4,6 +4,7 @@ use opengl_graphics::GlGraphics;
 
 use drawings::Point;
 use drawings::Sprites;
+use drawings::SKELINGTON_IDLE;
 
 
 pub struct Skelington {
@@ -28,13 +29,15 @@ impl Skelington {
 
     /// Draw the player
     pub fn draw(&self, c: &Context, gl: &mut GlGraphics, sprites: &Sprites) {
-        let x = self.coordinates.x() + 50.0;
-        let y = self.coordinates.y() + 50.0;
-        sprites.draw_chars(x, y, 6, self.animation_state, c, gl);
+        let x = self.coordinates.x();
+        let y = self.coordinates.y();
+        let (index, _) = SKELINGTON_IDLE;
+        sprites.draw_chars(x, y, index, self.animation_state, c, gl);
     }
 
     pub fn update_animation_state(&mut self, state: f64) {
-        self.animation_state = ((state / 0.1) as i32) % 6;
+        let (_, animation_length) = SKELINGTON_IDLE;
+        self.animation_state = ((state / 0.1) as i32) % animation_length;
     }
 
     /// When the enemy takes some damage

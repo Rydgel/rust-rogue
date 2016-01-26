@@ -5,7 +5,9 @@ use itertools::Itertools;
 
 use models::Player;
 use models::Skelington;
+use models::Stinkbag;
 use drawings::Sprites;
+
 
 #[derive(Default)]
 struct Timers {
@@ -22,6 +24,7 @@ pub struct Game {
     down: bool,
     player: Player,
     skelingtons: Vec<Skelington>,
+    stinkbags: Vec<Stinkbag>,
     timers: Timers,
     sprites: Sprites,
 }
@@ -38,6 +41,7 @@ impl Game {
             down: false,
             player: Player::spawn(),
             skelingtons: vec![Skelington::spawn(), Skelington::spawn()],
+            stinkbags: vec![Stinkbag::spawn(), Stinkbag::spawn()],
             timers: Timers::default(),
             sprites: Sprites::new(),
         }
@@ -48,9 +52,15 @@ impl Game {
         self.rotation += 15.0 * upd.dt;
         // animations
         self.player.update_animation_state(self.timers.current_time);
+
         for s in &mut self.skelingtons {
             s.update_animation_state(self.timers.current_time);
         }
+
+        for s in &mut self.stinkbags {
+            s.update_animation_state(self.timers.current_time);
+        }
+
         self.move_player(upd.dt);
     }
 
@@ -102,5 +112,7 @@ impl Game {
         self.player.draw(&c, g, &self.sprites);
         // Draw skelingtons
         self.skelingtons.iter().foreach(|s| s.draw(&c, g, &self.sprites));
+        // Draw stinkbags
+        self.stinkbags.iter().foreach(|s| s.draw(&c, g, &self.sprites));
     }
 }
