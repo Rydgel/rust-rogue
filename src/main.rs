@@ -26,8 +26,8 @@ fn try_create_window(samples: u8) -> Result<Sdl2Window, String> {
     WindowSettings::new("Rust Rogue", [640, 640])
         .exit_on_esc(true)
         .opengl(OPEN_GL)
-        .vsync(true)
         .samples(samples)
+        .vsync(true)
         .fullscreen(false)
         .build()
 }
