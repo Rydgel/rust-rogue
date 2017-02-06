@@ -37,13 +37,6 @@ impl Sprites {
         Sprites { texture: texture }
     }
 
-    /// Get the right slice of the sprite. Sprite is 8x8
-    fn animated_sprites_coord(state: f64, start: f64) -> [f64; 4] {
-        let x = (state + start) % 8.0;
-        let y = (((state + start) as i32) / 8) as f64;
-        [x * 64.0, y * 64.0, 64.0, 64.0]
-    }
-
     /// Draw an animated sprite with current state
     pub fn draw_chars(&self, x: f64, y: f64, i: f64, st: f64, c: &Context, gl: &mut GlGraphics) {
         let sprite_coord = Sprites::animated_sprites_coord(st, i);
@@ -95,5 +88,12 @@ impl Sprites {
         texture_settings.set_convert_gamma(true);
         texture_settings.set_compress(true);
         Texture::from_image(&img, &texture_settings)
+    }
+
+    /// Get the right slice of the sprite. Sprite is 8x8
+    fn animated_sprites_coord(state: f64, start: f64) -> [f64; 4] {
+        let x = (state + start) % 8.0;
+        let y = (((state + start) as i32) / 8) as f64;
+        [x * 64.0, y * 64.0, 64.0, 64.0]
     }
 }
