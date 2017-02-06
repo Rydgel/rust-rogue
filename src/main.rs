@@ -5,6 +5,7 @@ extern crate opengl_graphics;
 extern crate piston;
 extern crate rand;
 extern crate find_folder;
+extern crate image;
 
 mod models;
 mod drawings;
@@ -12,13 +13,13 @@ mod game;
 
 use sdl2_window::Sdl2Window;
 use opengl_graphics::{GlGraphics, OpenGL};
-use piston::event_loop::{Events, EventLoop};
-use piston::input::{Button, Event, Input, RenderEvent};
+use piston::event_loop::{Events, EventSettings};
+use piston::input::{Button, Input};
 use piston::window::WindowSettings;
 
 use game::Game;
 
-const OPEN_GL: OpenGL = OpenGL::V3_2;
+const OPEN_GL: OpenGL = OpenGL::V4_1;
 
 // Returns a result containing a Sdl2Window or an error if the window
 // settings are not supported
@@ -28,7 +29,7 @@ fn try_create_window(samples: u8) -> Result<Sdl2Window, String> {
         .opengl(OPEN_GL)
         .samples(samples)
         .vsync(true)
-        .fullscreen(false)
+        .fullscreen(true)
         .build()
 }
 
@@ -40,26 +41,28 @@ fn main() {
     let mut gl = GlGraphics::new(OPEN_GL);
 
     // Event handling
-    let mut events = window.events().ups(60).max_fps(60);
+    let mut event_settings = EventSettings::new();
+    event_settings.max_fps = 60;
+    let mut events = Events::new(event_settings);
 
     // Game state
     let mut game = Game::new();
 
     while let Some(e) = events.next(&mut window) {
         match e {
-            Event::Input(Input::Press(Button::Keyboard(key))) => {
+            Input::Press(Button::Keyboard(key)) => {
                 game.key_press(key);
             }
 
-            Event::Input(Input::Release(Button::Keyboard(key))) => {
+            Input::Release(Button::Keyboard(key)) => {
                 game.key_release(key);
             }
 
-            Event::Render(args) => {
+            Input::Render(args) => {
                 gl.draw(args.viewport(), |c, g| game.render(c, g));
             }
 
-            Event::Update(args) => {
+            Input::Update(args) => {
                 game.update(args);
             }
 

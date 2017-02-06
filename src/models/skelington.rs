@@ -9,7 +9,7 @@ use drawings::SKELINGTON_IDLE;
 
 pub struct Skelington {
     coordinates: Point,
-    animation_state: i32, // there is 6 animation frames.
+    animation_state: f64, // there is 6 animation frames.
     life: u32,
 }
 
@@ -22,7 +22,7 @@ impl Skelington {
 
         Skelington {
             coordinates: Point::new(x, y),
-            animation_state: 0,
+            animation_state: 0.0,
             life: 100,
         }
     }
@@ -37,7 +37,7 @@ impl Skelington {
 
     pub fn update_animation_state(&mut self, state: f64) {
         let (_, animation_length) = SKELINGTON_IDLE;
-        self.animation_state = ((state / 0.1) as i32) % animation_length;
+        self.animation_state = (((state / 0.1) as i32) as f64) % animation_length;
     }
 
     /// When the enemy takes some damage
