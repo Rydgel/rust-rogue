@@ -19,7 +19,7 @@ use piston::window::WindowSettings;
 
 use game::Game;
 
-const OPEN_GL: OpenGL = OpenGL::V4_1;
+const OPEN_GL: OpenGL = OpenGL::V3_3;
 
 // Returns a result containing a Sdl2Window or an error if the window
 // settings are not supported
@@ -29,7 +29,7 @@ fn try_create_window(samples: u8) -> Result<Sdl2Window, String> {
         .opengl(OPEN_GL)
         .samples(samples)
         .vsync(true)
-        .fullscreen(true)
+        .fullscreen(false)
         .build()
 }
 

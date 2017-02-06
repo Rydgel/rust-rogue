@@ -2,8 +2,11 @@ use opengl_graphics::{GlGraphics, Texture, TextureSettings};
 use graphics::{Context, Transformed};
 use graphics::draw_state::DrawState;
 use graphics::Image;
-use image::{self, DynamicImage, RgbaImage};
+use image::{self, DynamicImage};
 use find_folder;
+use graphics::color::gamma_srgb_to_linear;
+use image::Pixel;
+use image::Rgba;
 
 
 pub const PLAYER_IDLE: (f64, f64) = (0.0, 6.0);
@@ -28,20 +31,9 @@ pub struct Sprites {
 impl Sprites {
     /// Loading sprite sheet from image.
     pub fn new() -> Sprites {
-        let resources = find_folder::Search::ParentsThenKids(3, 3)
-            .for_folder("resources")
-            .unwrap();
-        let sprite = resources.join("Scavengers_SpriteSheet.png");
-        let img = image::open(&sprite).unwrap();
-        let img = match img {
-            DynamicImage::ImageRgba8(img) => img,
-            x => x.to_rgba(),
-        };
-
-        let mut texture_settings = TextureSettings::new();
-        texture_settings.set_convert_gamma(true);
-        texture_settings.set_compress(true);
-        let texture = Texture::from_image(&img, &texture_settings);
+        let img = Sprites::load_image("Scavengers_SpriteSheet.png");
+        let new_img = Sprites::convert_image_from_srgb_to_linear(img);
+        let texture = Sprites::create_texture_from_image(new_img);
         Sprites { texture: texture }
     }
 
@@ -59,5 +51,49 @@ impl Sprites {
         Image::new()
             .src_rect(sprite_coord)
             .draw(&self.texture, &DrawState::new_alpha(), transf, gl);
+    }
+
+    // private helpers
+
+    fn load_image(path: &str) -> image::ImageBuffer<Rgba<u8>, Vec<u8>> {
+        let resources = find_folder::Search::ParentsThenKids(3, 3)
+            .for_folder("resources")
+            .unwrap();
+        let sprite = resources.join(path);
+        let img = image::open(&sprite).unwrap();
+        let img = match img {
+            DynamicImage::ImageRgba8(img) => img,
+            x => x.to_rgba(),
+        };
+        img
+    }
+
+    fn convert_image_from_srgb_to_linear(img: image::ImageBuffer<Rgba<u8>, Vec<u8>>)
+                                         -> image::ImageBuffer<Rgba<u8>, Vec<u8>> {
+        let mut new_img = img.clone();
+
+        for (x, y, pixel) in img.enumerate_pixels() {
+            let (r, g, b, a) = pixel.channels4();
+            let r = r as f32 / 255.0;
+            let g = g as f32 / 255.0;
+            let b = b as f32 / 255.0;
+            let a = a as f32 / 255.0;
+            let new_color = gamma_srgb_to_linear([r, g, b, a]);
+            let r = (new_color[0] * 255.0) as u8;
+            let g = (new_color[1] * 255.0) as u8;
+            let b = (new_color[2] * 255.0) as u8;
+            let a = (new_color[3] * 255.0) as u8;
+            let new_pixel = image::Pixel::from_channels(r, g, b, a);
+            new_img.put_pixel(x, y, new_pixel);
+        }
+
+        new_img
+    }
+
+    fn create_texture_from_image(img: image::ImageBuffer<Rgba<u8>, Vec<u8>>) -> Texture {
+        let mut texture_settings = TextureSettings::new();
+        texture_settings.set_convert_gamma(true);
+        texture_settings.set_compress(true);
+        Texture::from_image(&img, &texture_settings)
     }
 }
